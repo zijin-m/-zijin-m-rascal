@@ -103,7 +103,7 @@ declare module 'config' {
 	export default config;
 
 }
-declare module 'index' {
+declare module '@zijin-m/rascal' {
 	import { BrokerProxy } from 'broker';
 	import { Consumer } from 'lib/consumer';
 	export { Consumer, BrokerProxy as Broker };
