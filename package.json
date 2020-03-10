@@ -9,7 +9,6 @@
   ],
   "description": "wrapper for rascal supporting default publication, subscription handlers, auto republish message when confirm failed and auto ackOrNack when no error emit form your handler",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },

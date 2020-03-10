@@ -2,11 +2,11 @@ import Debug from "debug";
 import { BrokerAsPromised, BrokerAsPromisedClass, withDefaultConfig } from "rascal";
 import Publication from "./publication";
 import SubScription from "./subscription";
-import { Consumer } from "./interface";
+import { Consumer } from "./lib/consumer";
 
 const debug = Debug("rascal:ProxyBroker");
 
-export default class BrokerProxy {
+export class BrokerProxy {
 
     public static async create(config: any, components?: any) {
         if (!this.instance) {

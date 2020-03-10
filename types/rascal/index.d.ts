@@ -25,6 +25,9 @@ declare module "rascal" {
 
     export function withDefaultConfig<T>(config: T): T;
 
+
+    export type AckOrNackFn = (err?: Error, recovery?: Recovery | Recovery[]) => void;
+
     export interface RascalConfig {
         vhosts: {
             [key: string]: Vhost
@@ -60,10 +63,10 @@ declare module "rascal" {
     }
 
     interface Vhost {
-        namespace? : string;
-        name? : string;
-        check? : boolean;
-        assert? : boolean;
+        namespace?: string;
+        name?: string;
+        check?: boolean;
+        assert?: boolean;
         connection?: Connection;
         exchanges: {
             [key: string]: Exchange

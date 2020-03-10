@@ -1,10 +1,17 @@
 import { Message } from "amqplib";
 import Debug from "debug";
 import ramda from "ramda";
-import { BrokerAsPromisedClass, SubscriptionSession } from "rascal";
-import { AckOrNackFn, Consumer } from "./interface";
+import { BrokerAsPromisedClass, SubscriptionSession, AckOrNackFn } from "rascal";
+import { Consumer } from "./lib/consumer";
 
 const debug = Debug("rascal:ProxySubScription");
+
+interface SubScriptionConfig {
+    name: string;
+    broker: BrokerAsPromisedClass;
+    overrides?: any;
+}
+
 
 export default class SubScription {
 

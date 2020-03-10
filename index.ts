@@ -1,3 +1,8 @@
-export * from "./broker";
+import { BrokerProxy } from "./broker"
 
-export { Consumer } from "./interface"
+import { Consumer } from "./lib/consumer"
+
+export {
+    Consumer,
+    BrokerProxy as Broker
+}

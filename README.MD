@@ -25,3 +25,28 @@ This project want to add more default features for rascal that:
   
 # Examples 
 
+### Publish
+
+```js
+import { Broker, Consumer } from "@zijin-m/rascal";
+import config from "./config";
+
+const broker = await Broker.create(config)
+await broker.publish('order.save', { now: new Date().toLocaleTimeString() 
+```
+
+### Subscribe
+
+```js
+import { Broker, Consumer } from "@zijin-m/rascal";
+import config from "./config";
+
+class JobCousumer extends Consumer {
+    async onMessage(content: any) {
+        // your code
+    }
+}
+
+const broker = await Broker.create(config)
+await broker.addConsumer(new JobCousumer("order.save"))
+```
