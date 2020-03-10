@@ -1,0 +1,36 @@
+{
+  "name": "@zijin-m/rascal",
+  "version": "0.0.1",
+  "keywords": [
+    "amqplib",
+    "amqp",
+    "rabbitmq",
+    "rascal"
+  ],
+  "description": "wrapper for rascal supporting default publication, subscription handlers, auto republish message when confirm failed and auto ackOrNack when no error emit form your handler",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "zijin-m",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.5",
+    "async": "^3.2.0",
+    "debug": "^4.1.1",
+    "ramda": "^0.27.0",
+    "rascal": "^8.0.1",
+    "uuid": "^7.0.2",
+    "@types/amqplib": "^0.5.13",
+    "@types/async": "^3.0.8",
+    "@types/debug": "^4.1.5",
+    "@types/ramda": "^0.26.43",
+    "@types/uuid": "^7.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^8.6.2",
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
+  }
+}
