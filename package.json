@@ -12,6 +12,11 @@
   "scripts": {
     "build": "tsc"
   },
+  "typings": "index.d.ts",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
   "author": "zijin-m",
   "license": "ISC",
   "dependencies": {
