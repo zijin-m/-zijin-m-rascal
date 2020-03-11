@@ -1,6 +1,6 @@
 {
   "name": "@zijin-m/rascal",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "amqplib",
     "amqp",
@@ -18,6 +18,13 @@
     "index.d.ts"
   ],
   "author": "zijin-m",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zijin-m/-zijin-m-rascal"
+  },
+  "bugs": {
+    "url": "https://github.com/zijin-m/-zijin-m-rascal/issues"
+  },
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.5",

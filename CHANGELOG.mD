@@ -7,3 +7,8 @@
 ### 0.0.2
 ### Updated
 * index.d.ts
+
+### 0.0.3
+### Updated
+* add git url
+* update README

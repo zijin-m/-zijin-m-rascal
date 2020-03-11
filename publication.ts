@@ -17,7 +17,7 @@ export default class PublicationProxy {
         };
     }
 
-    private failedQuene: AsyncQueue<any>;
+    private failedQueue: AsyncQueue<any>;
 
     private messageMap = new Map<string, any>();
 
@@ -32,7 +32,7 @@ export default class PublicationProxy {
     constructor(name: string, broker: BrokerAsPromisedClass) {
         this.name = name;
         this.broker = broker;
-        this.failedQuene = this.createFailedMessageQueue();
+        this.failedQueue = this.createFailedMessageQueue();
         this.pauseQueue();
     }
 
@@ -54,7 +54,7 @@ export default class PublicationProxy {
     public runTimer() {
         if (!this.interval) {
             this.interval = setInterval(async() => {
-                const queueHead = (this.failedQuene as any)._tasks.head;
+                const queueHead = (this.failedQueue as any)._tasks.head;
                 if (queueHead) {
                     await this.retryByMessageId(queueHead.data);
                 }
@@ -63,16 +63,16 @@ export default class PublicationProxy {
     }
 
     private pauseQueue() {
-        if (!this.failedQuene.paused) {
-            this.failedQuene.pause();
+        if (!this.failedQueue.paused) {
+            this.failedQueue.pause();
             this.runTimer();
         }
     }
 
     private resumeQueue() {
-        if (this.failedQuene.paused) {
+        if (this.failedQueue.paused) {
             this.pauseTimer();
-            this.failedQuene.resume();
+            this.failedQueue.resume();
         }
     }
 
@@ -103,7 +103,7 @@ export default class PublicationProxy {
     }
 
     private queueContains(messageId: string) {
-        const tasks: string[] = (this.failedQuene as any)._tasks.toArray();
+        const tasks: string[] = (this.failedQueue as any)._tasks.toArray();
         return tasks.includes(messageId);
     }
 
@@ -111,7 +111,7 @@ export default class PublicationProxy {
         if (this.queueContains(messageId)) {
             return;
         }
-        this.failedQuene.push(messageId, (err) => {
+        this.failedQueue.push(messageId, (err) => {
             if (err) {
                 debug("Message retry Error: %s for msgId %s", err.message, messageId);
             }
