@@ -154,7 +154,7 @@ Consumer will call `ackOrNack(error)` to not ack message, leading to message los
 
 ### onMessage call throw error and you config redeliveries
 
-if you do not want to retry some times when your code throw error for `mysql` network failed and other reason that can success handle this message after retry, you can config `redeliveries` in `config file` that named `config.json or config.ts` like examples,
+if you do want to retry some times when your code throw error for network failed and other reason that can success handle this message after retry, you can config `redeliveries` in `config file` that named `config.json or config.ts` like examples,
 
 ```js
 subscriptions: {
@@ -187,7 +187,7 @@ redeliveries: {
   }
 }
 ```
-after config, `Consumer` will use recovery `deferred_retry` to retry 10 time, each time defer `10 * 1000` ms to wait network or other make message failed reason recover. and if all 10 time failed, `Consumer` will `ackOrNack(err)` by listen `redeliveries_exceeded` than emit by `rascal`, leading to message loss if you have not configured a dead letter exchange/queue.
+after config, `Consumer` will use recovery `deferred_retry` to retry 10 time, each time defer `10 * 1000` ms to wait network or other make message failed reason recover. and if all 10 time failed, `Consumer` will `ackOrNack(err)` by listen `redeliveries_exceeded` that emited by `rascal` [redeliveries_exceeded](https://github.com/guidesmiths/rascal#avoiding-potential-message-loss), leading to message loss if you have not configured a dead letter exchange/queue.
 
 #### Implementing your own counter
 
