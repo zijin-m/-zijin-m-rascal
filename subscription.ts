@@ -6,13 +6,6 @@ import { Consumer } from "./lib/consumer";
 
 const debug = Debug("rascal:ProxySubScription");
 
-interface SubScriptionConfig {
-    name: string;
-    broker: BrokerAsPromisedClass;
-    overrides?: any;
-}
-
-
 export default class SubScription {
 
     public readonly consumer: Consumer;

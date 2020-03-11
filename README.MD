@@ -1,6 +1,6 @@
 # @zijin-m/Rascal
 
-@zijin-m/Rascal wrapper for [rascal](https://www.npmjs.com/package/rascal) to support default publication, subscription handlers, auto republish message when confirm failed, auto ackOrNack when no error emit form your handler. 
+@zijin-m/Rascal wrapper for [rascal](https://www.npmjs.com/package/rascal) to support default publication, subscription handlers, auto republish message when confirm failed, auto ackOrNack when no error emit form your handler. only support es6+;
 
 [![NPM version](https://img.shields.io/npm/v/@zijin-m/rascal.svg?style=flat-square)](https://www.npmjs.com/package/@zijin-m/rascal)
 [![NPM downloads](https://img.shields.io/npm/dm/@zijin-m/rascal.svg?style=flat-square)](https://www.npmjs.com/package/@zijin-m/rascal)
@@ -41,13 +41,26 @@ module.exports = {
             },
             queues: {
                 "order.save.service_b": {
-                    assert: true
+                    assert: true,
+                    options:{
+                        arguments: {
+                            "x-dead-letter-exchange": "dead_letters",
+                            "x-dead-letter-routing-key": "order.save",
+                        }
+                    }
                 },
+                "dead_letters.order.save.service_b": {
+                    assert: true
+                }
             },
             exchanges: {
                 order: {
                     type: "direct",
                     assert: true
+                },
+                dead_letters: {
+                    type: "direct",
+                    assert: true,
                 }
             },
             bindings: {
@@ -55,6 +68,12 @@ module.exports = {
                     source: "order",
                     bindingKey: "save",
                     destination: "order.save.service_b",
+                    destinationType: "queue"
+                },
+                "dead_letters.order.save.service_b": {
+                    source: "dead_letters",
+                    bindingKey: "order.save",
+                    destination: "dead_letters.order.save.service_b",
                     destinationType: "queue"
                 },
             },

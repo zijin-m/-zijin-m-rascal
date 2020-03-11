@@ -53,10 +53,20 @@ export class BrokerProxy {
         return this.broker.bounce();
     }
 
+    /**
+     * publish message
+     * @param name publication name
+     * @param message message
+     * @param overrides overrides
+     */
     public async publish(name: string, message: any, overrides?: any) {
         return this.getPublication(name).publish(message, overrides);
     }
 
+    /**
+     * add Consumer instance to receive message
+     * @param consumer subclass of Consumer
+     */
     public async addConsumer(consumer: Consumer) {
         const subscription = await this.getSubScription(consumer);
         return subscription.subscribe();

@@ -16,3 +16,7 @@
 ### 0.0.4
 ### Updated
 * update README
+
+### 0.0.5
+### Updated
+* add x-dead-letter-exchange example

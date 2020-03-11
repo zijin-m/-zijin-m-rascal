@@ -10,13 +10,26 @@ module.exports = {
             },
             queues: {
                 "order.save.service_b": {
-                    assert: true
+                    assert: true,
+                    options:{
+                        arguments: {
+                            "x-dead-letter-exchange": "dead_letters",
+                            "x-dead-letter-routing-key": "order.save",
+                        }
+                    }
                 },
+                "dead_letters.order.save.service_b": {
+                    assert: true
+                }
             },
             exchanges: {
                 order: {
                     type: "direct",
                     assert: true
+                },
+                dead_letters: {
+                    type: "direct",
+                    assert: true,
                 }
             },
             bindings: {
@@ -24,6 +37,12 @@ module.exports = {
                     source: "order",
                     bindingKey: "save",
                     destination: "order.save.service_b",
+                    destinationType: "queue"
+                },
+                "dead_letters.order.save.service_b": {
+                    source: "dead_letters",
+                    bindingKey: "order.save",
+                    destination: "dead_letters.order.save.service_b",
                     destinationType: "queue"
                 },
             },
@@ -41,7 +60,7 @@ module.exports = {
                     vhost: "/",
                     recovery: "deferred_retry",
                     redeliveries: {
-                        limit: 3,
+                        limit: 10,
                         counter: "shared"
                     }
                 },

@@ -4,6 +4,11 @@ import { Message } from "amqplib";
 export class Consumer {
     public readonly name: string;
     public readonly overrides: any;
+    /**
+     * create Consumer to receive message
+     * @param name subscription name
+     * @param overrides overrides
+     */
     constructor(name: string, overrides?: any) {
         this.name = name;
         this.overrides = overrides;

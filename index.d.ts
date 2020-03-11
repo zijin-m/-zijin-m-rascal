@@ -4,7 +4,7 @@ declare module 'publication' {
 	import { BrokerAsPromisedClass } from 'rascal';
 	export default class PublicationProxy {
 	    private get defaultPushOptions();
-	    private failedQuene;
+	    private failedQueue;
 	    private messageMap;
 	    private interval;
 	    private readonly INTERVAL_PERIOD_SECOND;
@@ -35,6 +35,11 @@ declare module 'lib/consumer' {
 	export class Consumer {
 	    readonly name: string;
 	    readonly overrides: any;
+	    /**
+	     * create Consumer to receive message
+	     * @param name subscription name
+	     * @param overrides overrides
+	     */
 	    constructor(name: string, overrides?: any);
 	    onMessage(content: any, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
 	    onInvalidContent?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
@@ -84,7 +89,17 @@ declare module 'broker' {
 	    purge(): Promise<void>;
 	    shutdown(): Promise<void>;
 	    bounce(): Promise<void>;
+	    /**
+	     * publish message
+	     * @param name publication name
+	     * @param message message
+	     * @param overrides overrides
+	     */
 	    publish(name: string, message: any, overrides?: any): Promise<import("events").EventEmitter>;
+	    /**
+	     * add Consumer instance to receive message
+	     * @param consumer subclass of Consumer
+	     */
 	    addConsumer(consumer: Consumer): Promise<import("rascal").SubscriptionSession>;
 	    private getPublication;
 	    private getSubScription;
@@ -98,15 +113,11 @@ declare module 'broker' {
 	}
 
 }
-declare module 'config' {
-	import { RascalConfig } from 'rascal'; const config: RascalConfig;
-	export default config;
-
-}
 declare module '@zijin-m/rascal' {
 	import { BrokerProxy } from 'broker';
 	import { Consumer } from 'lib/consumer';
-	export { Consumer, BrokerProxy as Broker };
+	import { Message } from 'amqplib';
+	export { Consumer, Message, BrokerProxy as Broker };
 
 }
 declare module "rascal" {
