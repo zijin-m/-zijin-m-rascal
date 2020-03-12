@@ -147,6 +147,7 @@ publication.on('success', console.log);
 import { Broker, Consumer } from "@zijin-m/rascal";
 import config from "./config";
 
+@suscribeDecorator("order.save")
 class OrderSaveCousumer extends Consumer {
     async onMessage(content: any, message: Message) {
         // your code
@@ -155,6 +156,8 @@ class OrderSaveCousumer extends Consumer {
 }
 
 const broker = await Broker.create(config)
+await broker.addConsumer(new OrderSaveCousumer())
+//or if you not use suscribeDecorator
 await broker.addConsumer(new OrderSaveCousumer("order.save"))
 ```
 

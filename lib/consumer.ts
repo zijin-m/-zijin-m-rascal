@@ -9,8 +9,8 @@ export class Consumer {
      * @param name subscription name
      * @param overrides overrides
      */
-    constructor(name: string, overrides?: any) {
-        this.name = name;
+    constructor(name?: string, overrides?: any) {
+        this.name = name || "";
         this.overrides = overrides;
     }
     public async onMessage(content: any, message: Message, ackOrNack: AckOrNackFn): Promise<void> {

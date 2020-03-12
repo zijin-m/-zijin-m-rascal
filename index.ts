@@ -1,11 +1,12 @@
 import { BrokerProxy } from "./broker"
 
-import { Consumer } from "./lib/consumer"
+import { Consumer, suscribeDecorator } from "./lib"
 
 import { Message } from "amqplib";
 
 export {
     Consumer,
     Message,
-    BrokerProxy as Broker
+    BrokerProxy as Broker,
+    suscribeDecorator
 }

@@ -40,7 +40,7 @@ declare module 'lib/consumer' {
 	     * @param name subscription name
 	     * @param overrides overrides
 	     */
-	    constructor(name: string, overrides?: any);
+	    constructor(name?: string, overrides?: any);
 	    onMessage(content: any, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
 	    onInvalidContent?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
 	    onRedeliveriesError?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
@@ -119,11 +119,29 @@ declare module 'broker' {
 	}
 
 }
+declare module 'lib/decorator' {
+	/**
+	 * set class.name by decorator
+	 * @param name subscription name
+	 */
+	export function suscribeDecorator(name: string): <T extends new (...args: any[]) => {}>(constructor: T) => {
+	    new (...args: any[]): {
+	        name: string;
+	    };
+	} & T;
+
+}
+declare module 'lib' {
+	import { suscribeDecorator } from 'lib/decorator';
+	import { Consumer } from 'lib/consumer';
+	export { suscribeDecorator, Consumer };
+
+}
 declare module '@zijin-m/rascal' {
 	import { BrokerProxy } from 'broker';
-	import { Consumer } from 'lib/consumer';
+	import { Consumer, suscribeDecorator } from 'lib';
 	import { Message } from 'amqplib';
-	export { Consumer, Message, BrokerProxy as Broker };
+	export { Consumer, Message, BrokerProxy as Broker, suscribeDecorator };
 
 }
 declare module "rascal" {
