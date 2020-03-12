@@ -144,7 +144,7 @@ publication.on('success', console.log);
 ### Subscribe
 
 ```js
-import { Broker, Consumer } from "@zijin-m/rascal";
+import { Broker, Consumer, suscribeDecorator } from "@zijin-m/rascal";
 import config from "./config";
 
 @suscribeDecorator("order.save")
