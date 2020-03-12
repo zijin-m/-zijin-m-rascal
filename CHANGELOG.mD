@@ -20,3 +20,7 @@
 ### 0.0.5
 ### Updated
 * add x-dead-letter-exchange example
+
+### 0.0.6
+### Added
+* support sucribe use rascal broker

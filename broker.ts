@@ -64,6 +64,15 @@ export class BrokerProxy {
     }
 
     /**
+     * direct subscribe use rascal
+     * @param name subscription name
+     * @param overrides overrides options
+     */
+    public async subscribe(name: string, overrides?: any) {
+        return this.broker.subscribe(name, overrides);
+    }
+
+    /**
      * add Consumer instance to receive message
      * @param consumer subclass of Consumer
      */

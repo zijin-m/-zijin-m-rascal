@@ -97,6 +97,12 @@ declare module 'broker' {
 	     */
 	    publish(name: string, message: any, overrides?: any): Promise<import("events").EventEmitter>;
 	    /**
+	     * direct subscribe use rascal
+	     * @param name subscription name
+	     * @param overrides overrides options
+	     */
+	    subscribe(name: string, overrides?: any): Promise<import("rascal").SubscriptionSession>;
+	    /**
 	     * add Consumer instance to receive message
 	     * @param consumer subclass of Consumer
 	     */
