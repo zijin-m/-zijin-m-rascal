@@ -1,12 +1,17 @@
 # Change Log
 
+### 0.0.10
+### Added
+* fix word spell
+* update Readme
+
 ### 0.0.8
 ### Added
-* support suscribeDecorator
+* support subscribeDecorator
 
 ### 0.0.6
 ### Added
-* support sucribe use rascal broker
+* support subscribe use rascal broker
 
 ### 0.0.5
 ### Updated

@@ -1,122 +1,122 @@
 declare module 'publication' {
-	/// <reference types="node" />
-	import { EventEmitter } from 'events';
-	import { BrokerAsPromisedClass } from 'rascal';
-	export default class PublicationProxy {
-	    private get defaultPushOptions();
-	    private failedQueue;
-	    private messageMap;
-	    private interval;
-	    private readonly INTERVAL_PERIOD_SECOND;
-	    private readonly name;
-	    private readonly broker;
-	    constructor(name: string, broker: BrokerAsPromisedClass);
-	    publish(message: any, overrides?: any): Promise<EventEmitter>;
-	    pauseTimer(): void;
-	    runTimer(): void;
-	    private pauseQueue;
-	    private resumeQueue;
-	    private attachPublishHandlers;
-	    private createFailedMessageQueue;
-	    private retryByMessageId;
-	    private queueContains;
-	    private pushQueue;
-	    private onConfirmError;
-	    private onConfirmSuccess;
-	    private onConfirmReturn;
-	    private addMessage;
-	    private delteMessage;
-	}
+    /// <reference types="node" />
+    import { EventEmitter } from 'events';
+    import { BrokerAsPromisedClass } from 'rascal';
+    export default class PublicationProxy {
+        private get defaultPushOptions();
+        private failedQueue;
+        private messageMap;
+        private interval;
+        private readonly INTERVAL_PERIOD_SECOND;
+        private readonly name;
+        private readonly broker;
+        constructor(name: string, broker: BrokerAsPromisedClass);
+        publish(message: any, overrides?: any): Promise<EventEmitter>;
+        pauseTimer(): void;
+        runTimer(): void;
+        private pauseQueue;
+        private resumeQueue;
+        private attachPublishHandlers;
+        private createFailedMessageQueue;
+        private retryByMessageId;
+        private queueContains;
+        private pushQueue;
+        private onConfirmError;
+        private onConfirmSuccess;
+        private onConfirmReturn;
+        private addMessage;
+        private deleteMessage;
+    }
 
 }
 declare module 'lib/consumer' {
-	import { AckOrNackFn } from 'rascal';
-	import { Message } from 'amqplib';
-	export class Consumer {
-	    readonly name: string;
-	    readonly overrides: any;
+    import { AckOrNackFn } from 'rascal';
+    import { Message } from 'amqplib';
+    export class Consumer {
+        readonly name: string;
+        readonly overrides: any;
 	    /**
 	     * create Consumer to receive message
 	     * @param name subscription name
 	     * @param overrides overrides
 	     */
-	    constructor(name?: string, overrides?: any);
-	    onMessage(content: any, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onInvalidContent?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onRedeliveriesError?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onRedeliveriesExceeded?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onError?(err: Error): Promise<void>;
-	    onConsumerCancel?(err: Error): Promise<void>;
-	}
+        constructor(name?: string, overrides?: any);
+        onMessage(content: any, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onInvalidContent?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onRedeliveriesError?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onRedeliveriesExceeded?(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onError?(err: Error): Promise<void>;
+        onConsumerCancel?(err: Error): Promise<void>;
+    }
 
 }
 declare module 'subscription' {
-	import { Message } from 'amqplib';
-	import { BrokerAsPromisedClass, SubscriptionSession, AckOrNackFn } from 'rascal';
-	import { Consumer } from 'lib/consumer';
-	export default class SubScription {
-	    readonly consumer: Consumer;
-	    private session;
-	    private readonly broker;
-	    constructor(consumer: Consumer, broker: BrokerAsPromisedClass);
-	    subscribe(): Promise<SubscriptionSession>;
-	    messageHandler(message: Message, content: any, ackOrNack: AckOrNackFn): Promise<void>;
-	    onInvalidContent(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onRedeliveriesError(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onRedeliveriesExceeded(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
-	    onError(err: Error): Promise<void>;
-	    onConsumerCancel(err: Error): Promise<void>;
-	    private getRecovery;
-	    private attachSessionHandlers;
-	}
+    import { Message } from 'amqplib';
+    import { BrokerAsPromisedClass, SubscriptionSession, AckOrNackFn } from 'rascal';
+    import { Consumer } from 'lib/consumer';
+    export default class SubScription {
+        readonly consumer: Consumer;
+        private session;
+        private readonly broker;
+        constructor(consumer: Consumer, broker: BrokerAsPromisedClass);
+        subscribe(): Promise<SubscriptionSession>;
+        messageHandler(message: Message, content: any, ackOrNack: AckOrNackFn): Promise<void>;
+        onInvalidContent(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onRedeliveriesError(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onRedeliveriesExceeded(err: Error, message: Message, ackOrNack: AckOrNackFn): Promise<void>;
+        onError(err: Error): Promise<void>;
+        onConsumerCancel(err: Error): Promise<void>;
+        private getRecovery;
+        private attachSessionHandlers;
+    }
 
 }
 declare module 'broker' {
-	/// <reference types="node" />
-	/// <reference types="rascal" />
-	import { Consumer } from 'lib/consumer';
-	export class BrokerProxy {
-	    static create(config: any, components?: any): Promise<BrokerProxy>;
-	    private static instance;
-	    private config;
-	    private components;
-	    private broker;
-	    private publications;
-	    private subScriptions;
-	    private constructor();
-	    connect(name: string): Promise<any>;
-	    nuke(): Promise<void>;
-	    purge(): Promise<void>;
-	    shutdown(): Promise<void>;
-	    bounce(): Promise<void>;
+    /// <reference types="node" />
+    /// <reference types="rascal" />
+    import { Consumer } from 'lib/consumer';
+    export class BrokerProxy {
+        static create(config: any, components?: any): Promise<BrokerProxy>;
+        private static instance;
+        private config;
+        private components;
+        private broker;
+        private publications;
+        private subScriptions;
+        private constructor();
+        connect(name: string): Promise<any>;
+        nuke(): Promise<void>;
+        purge(): Promise<void>;
+        shutdown(): Promise<void>;
+        bounce(): Promise<void>;
 	    /**
 	     * publish message
 	     * @param name publication name
 	     * @param message message
 	     * @param overrides overrides
 	     */
-	    publish(name: string, message: any, overrides?: any): Promise<import("events").EventEmitter>;
+        publish(name: string, message: any, overrides?: any): Promise<import("events").EventEmitter>;
 	    /**
 	     * direct subscribe use rascal
 	     * @param name subscription name
 	     * @param overrides overrides options
 	     */
-	    subscribe(name: string, overrides?: any): Promise<import("rascal").SubscriptionSession>;
+        subscribe(name: string, overrides?: any): Promise<import("rascal").SubscriptionSession>;
 	    /**
 	     * add Consumer instance to receive message
 	     * @param consumer subclass of Consumer
 	     */
-	    addConsumer(consumer: Consumer): Promise<import("rascal").SubscriptionSession>;
-	    private getPublication;
-	    private getSubScription;
-	    private init;
-	    private attachBrokerHandlers;
-	    private onBrokerError;
-	    private onBrokerConnect;
-	    private onBrokerDisconnect;
-	    private runAllTimer;
-	    private stopAllTimer;
-	}
+        addConsumer(consumer: Consumer): Promise<import("rascal").SubscriptionSession>;
+        private getPublication;
+        private getSubScription;
+        private init;
+        private attachBrokerHandlers;
+        private onBrokerError;
+        private onBrokerConnect;
+        private onBrokerDisconnect;
+        private runAllTimer;
+        private stopAllTimer;
+    }
 
 }
 declare module 'lib/decorator' {
@@ -124,24 +124,24 @@ declare module 'lib/decorator' {
 	 * set class.name by decorator
 	 * @param name subscription name
 	 */
-	export function suscribeDecorator(name: string): <T extends new (...args: any[]) => {}>(constructor: T) => {
-	    new (...args: any[]): {
-	        name: string;
-	    };
-	} & T;
+    export function subscribeDecorator(name: string): <T extends new (...args: any[]) => {}>(constructor: T) => {
+        new(...args: any[]): {
+            name: string;
+        };
+    } & T;
 
 }
 declare module 'lib' {
-	import { suscribeDecorator } from 'lib/decorator';
-	import { Consumer } from 'lib/consumer';
-	export { suscribeDecorator, Consumer };
+    import { subscribeDecorator } from 'lib/decorator';
+    import { Consumer } from 'lib/consumer';
+    export { subscribeDecorator, Consumer };
 
 }
 declare module '@zijin-m/rascal' {
-	import { BrokerProxy } from 'broker';
-	import { Consumer, suscribeDecorator } from 'lib';
-	import { Message } from 'amqplib';
-	export { Consumer, Message, BrokerProxy as Broker, suscribeDecorator };
+    import { BrokerProxy } from 'broker';
+    import { Consumer, subscribeDecorator } from 'lib';
+    import { Message } from 'amqplib';
+    export { Consumer, Message, BrokerProxy as Broker, subscribeDecorator };
 
 }
 declare module "rascal" {

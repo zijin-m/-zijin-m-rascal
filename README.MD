@@ -1,6 +1,6 @@
 # @zijin-m/Rascal
 
-@zijin-m/Rascal wrapper for [rascal](https://www.npmjs.com/package/rascal) to support default publication, subscription handlers, auto republish message when confirm failed, auto ackOrNack when no error emit form your handler. only support es6+;
+@zijin-m/Rascal wrapper for [rascal](https://www.npmjs.com/package/rascal) to support default publication, subscription handlers, auto republish message when confirm failed, auto ackOrNack when no error emit from your handler. only support es6+;
 
 [![NPM version](https://img.shields.io/npm/v/@zijin-m/rascal.svg?style=flat-square)](https://www.npmjs.com/package/@zijin-m/rascal)
 [![NPM downloads](https://img.shields.io/npm/dm/@zijin-m/rascal.svg?style=flat-square)](https://www.npmjs.com/package/@zijin-m/rascal)
@@ -17,8 +17,8 @@ This project want to add more default features for rascal that:
 
 * default broker error handler
 * default publication event handler for success, return and error
-* repulih message when confirm error from rabbitmq
-* default subscription event handler for messgae, error and so on
+* republish message when confirm error from rabbitMQ
+* default subscription event handler for message, error and so on
 * auto ackOrNack message when no error throw form handler
 * ts support
   
@@ -127,28 +127,28 @@ const broker = await Broker.create(config)
 const publication = await broker.publish('order.save', 'some message') 
 ```
 
-when you publish message, `Publication` will use a `failedQueue` that save all failed confirm message, to retry failed messgaes when connection recovery event emit or interval timer success publish message that is head of `failedQueue` .
+when you publish message, `Publication` will use a `failedQueue` that save all failed confirm message, to retry failed messages when connection recovery event emit or interval timer success publish message that is head of `failedQueue` .
 
 Note
 
-*  `messgae` push to `failedQueue` only rabbitMQ return `error` confirm event, when return `return` confirm event, `Publication` will `nack` message, leading to message loss if you have not configured a dead letter exchange/queue.
+*  `message` push to `failedQueue` only rabbitMQ return `error` confirm event, when return `return` confirm event, `Publication` will `nack` message, leading to message loss if you have not configured a dead letter exchange/queue.
 
 you can also add your event handlers by listen `broker.publish` returned `eventemitter` :
 
 ```js
 publication.on('error', console.error);
-publication.on('retrurn', console.log);
+publication.on('return', console.log);
 publication.on('success', console.log);
 ```
 
 ### Subscribe
 
 ```js
-import { Broker, Consumer, suscribeDecorator } from "@zijin-m/rascal";
+import { Broker, Consumer, subscribeDecorator } from "@zijin-m/rascal";
 import config from "./config";
 
-@suscribeDecorator("order.save")
-class OrderSaveCousumer extends Consumer {
+@subscribeDecorator("order.save")
+class OrderSaveConsumer extends Consumer {
     async onMessage(content: any, message: Message) {
         // your code
         // no need to call ackOrNack if your code success, Consumer will do this for you
@@ -156,9 +156,9 @@ class OrderSaveCousumer extends Consumer {
 }
 
 const broker = await Broker.create(config)
-await broker.addConsumer(new OrderSaveCousumer())
-//or if you not use suscribeDecorator
-await broker.addConsumer(new OrderSaveCousumer("order.save"))
+await broker.addConsumer(new OrderSaveConsumer())
+//or if you not use subscribeDecorator
+await broker.addConsumer(new OrderSaveConsumer("order.save"))
 ```
 
 ### auto ack
@@ -196,8 +196,8 @@ recovery: {
   deferred_retry: [
       {
           strategy: "nack", // nack message
-          requeue: true, // tell rabbitmq to requeue rqueue message
-          defer: 10 * 1000 // defer 10 * 1000 ms to nack message for wait other sevice or network to restore 。
+          requeue: true, // tell rabbitMQ to requeue requeue message
+          defer: 10 * 1000 // defer 10 * 1000 ms to nack message for wait other service or network to restore 。
       }
   ]
 },
@@ -209,7 +209,7 @@ redeliveries: {
   }
 }
 ```
-after config, `Consumer` will use recovery `deferred_retry` to retry 10 time, each time defer `10 * 1000` ms to wait network or other make message failed reason recover. and if all 10 time failed, `Consumer` will `ackOrNack(err)` by listen `redeliveries_exceeded` that emited by `rascal` [redeliveries_exceeded](https://github.com/guidesmiths/rascal#avoiding-potential-message-loss), leading to message loss if you have not configured a dead letter exchange/queue.
+after config, `Consumer` will use recovery `deferred_retry` to retry 10 time, each time defer `10 * 1000` ms to wait network or other make message failed reason recover. and if all 10 time failed, `Consumer` will `ackOrNack(err)` by listen `redeliveries_exceeded` that emitted by `rascal` [redeliveries_exceeded](https://github.com/guidesmiths/rascal#avoiding-potential-message-loss), leading to message loss if you have not configured a dead letter exchange/queue.
 
 #### Implementing your own counter
 
@@ -221,7 +221,7 @@ and not so accurate in cluster mode 。If want to protect yourself from redelive
 if you want to custom message by call `ackOrNack` your self, you can do like :
 
 ```js
-class OrderSaveCousumer extends Consumer {
+class OrderSaveConsumer extends Consumer {
     async onMessage(content: any, message: Message, ackOrNack: AckOrNackFn) {
         // your code
         // see https://github.com/guidesmiths/rascal#message-acknowledgement-and-recovery-strategies
@@ -229,5 +229,5 @@ class OrderSaveCousumer extends Consumer {
     }
 }
 ```
-when you muanul call ackOrNack , `Consumer` will not call it more.
+when you manual call ackOrNack , `Consumer` will not call it more.
 

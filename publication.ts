@@ -39,9 +39,9 @@ export default class PublicationProxy {
     public async publish(message: any, overrides?: any) {
         const config = mergeDeepRight(this.defaultPushOptions, overrides || {});
         this.addMessage(config.options.messageId, arguments);
-        const emiter = await this.broker.publish(this.name, message, config);
-        this.attachPublishHandlers(emiter);
-        return emiter;
+        const emitter = await this.broker.publish(this.name, message, config);
+        this.attachPublishHandlers(emitter);
+        return emitter;
     }
 
     public pauseTimer() {
@@ -53,7 +53,7 @@ export default class PublicationProxy {
 
     public runTimer() {
         if (!this.interval) {
-            this.interval = setInterval(async() => {
+            this.interval = setInterval(async () => {
                 const queueHead = (this.failedQueue as any)._tasks.head;
                 if (queueHead) {
                     await this.retryByMessageId(queueHead.data);
@@ -76,14 +76,14 @@ export default class PublicationProxy {
         }
     }
 
-    private attachPublishHandlers(publihser: EventEmitter) {
-        publihser.on("success", this.onConfirmSuccess.bind(this));
-        publihser.on("return", this.onConfirmReturn.bind(this));
-        publihser.on("error", this.onConfirmError.bind(this));
+    private attachPublishHandlers(emitter: EventEmitter) {
+        emitter.on("success", this.onConfirmSuccess.bind(this));
+        emitter.on("return", this.onConfirmReturn.bind(this));
+        emitter.on("error", this.onConfirmError.bind(this));
     }
 
     private createFailedMessageQueue() {
-        return queue(async(messageId: string, callback: (err?: Error) => void) => {
+        return queue(async (messageId: string, callback: (err?: Error) => void) => {
             try {
                 await this.retryByMessageId(messageId);
                 callback();
@@ -126,20 +126,20 @@ export default class PublicationProxy {
 
     private async onConfirmSuccess(messageId: string) {
         debug("Message confirm success: %s", messageId);
-        this.delteMessage(messageId);
+        this.deleteMessage(messageId);
         this.resumeQueue();
     }
 
     private async onConfirmReturn(message: any) {
         debug("Message confirm return: %s", message.properties.messageId);
-        this.delteMessage(message.properties.messageId);
+        this.deleteMessage(message.properties.messageId);
     }
 
     private addMessage(messageId: string, message: any) {
         this.messageMap.set(messageId, message);
     }
 
-    private delteMessage(messageId: string) {
+    private deleteMessage(messageId: string) {
         this.messageMap.delete(messageId);
     }
 }

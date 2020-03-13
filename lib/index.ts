@@ -1,7 +1,7 @@
-import { suscribeDecorator } from "./decorator";
+import { subscribeDecorator } from "./decorator";
 import { Consumer } from "./consumer";
 
 export {
-    suscribeDecorator,
+    subscribeDecorator,
     Consumer
 }

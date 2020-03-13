@@ -4,7 +4,7 @@ import ramda from "ramda";
 import { BrokerAsPromisedClass, SubscriptionSession, AckOrNackFn } from "rascal";
 import { Consumer } from "./lib/consumer";
 
-const debug = Debug("rascal:ProxySubScription");
+const debug = Debug("rascal:ProxySubscription");
 
 export default class SubScription {
 
