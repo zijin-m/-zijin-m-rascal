@@ -144,11 +144,13 @@ publication.on('success', console.log);
 ### Subscribe
 
 ```js
-import { Broker, Consumer, subscribeDecorator } from "@zijin-m/rascal";
+import { Broker, Consumer, Message } from "@zijin-m/rascal";
 import config from "./config";
 
-@subscribeDecorator("order.save")
-class OrderSaveConsumer extends Consumer {
+class OrderSaveCousumer extends Consumer {
+
+    public readonly name = "order.save"; // set subscribe name or use new OrderSaveCousumer("order.save")
+
     async onMessage(content: any, message: Message) {
         // your code
         // no need to call ackOrNack if your code success, Consumer will do this for you
@@ -156,9 +158,8 @@ class OrderSaveConsumer extends Consumer {
 }
 
 const broker = await Broker.create(config)
-await broker.addConsumer(new OrderSaveConsumer())
-//or if you not use subscribeDecorator
-await broker.addConsumer(new OrderSaveConsumer("order.save"))
+await broker.addConsumer(new OrderSaveCousumer())
+
 ```
 
 ### auto ack
