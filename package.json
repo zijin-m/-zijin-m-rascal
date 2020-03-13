@@ -1,6 +1,6 @@
 {
     "name": "@zijin-m/rascal",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "keywords": [
         "amqplib",
         "amqp",
@@ -10,7 +10,8 @@
     "description": "wrapper for rascal supporting default publication, subscription handlers, auto republish message when confirm failed and auto ackOrNack when no error emit form your handler",
     "main": "./dist/index.js",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "publish": "tsc && npm publish --access=public"
     },
     "typings": "index.d.ts",
     "files": [
